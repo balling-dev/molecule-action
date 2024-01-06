@@ -5,7 +5,9 @@ author: Robert de Bock <robert@meinit.nl>
 
 inputs:
   namespace:
-    description: The [Docker Hub](https://hub.docker.com/) namespace where the image can be found. Defaults to `robertdebock`.
+    description: >
+      The [Docker Hub](https://hub.docker.com/) namespace where the image can be
+      found. Defaults to `robertdebock`.
     required: false
     default: robertdebock
   image:
@@ -17,10 +19,15 @@ inputs:
     required: false
     default: latest
   options:
-    description: Options you can pass to [`tox`](https://tox.readthedocs.io/en/latest/), for example `--parallel all`.
+    description: >
+      Options you can pass to [`tox`](https://tox.readthedocs.io/en/latest/),
+      for example `--parallel all`.
     required: false
   command:
-    description: What command to pass to [molecule](https://molecule.readthedocs.io/en/latest/), for example `create` or `syntax`. Defaults to `test`.
+    description: >
+      What command to pass to
+      [molecule](https://molecule.readthedocs.io/en/latest/), for example
+      `create` or `syntax`. Defaults to `test`.
     required: false
     default: test
   scenario:

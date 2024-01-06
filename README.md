@@ -1,13 +1,17 @@
 # Molecule action
 
-A GitHub action to test your [Ansible](https://www.ansible.com/) role using [Molecule](https://molecule.readthedocs.io/).
+A GitHub action to test your [Ansible](https://www.ansible.com/) role using
+[Molecule](https://ansible.readthedocs.io/projects/molecule/).
 
 ## Requirements
 
-This action can work with Molecule scenarios that use the [`docker`](https://molecule.readthedocs.io/configuration) driver.
+This action can work with Molecule scenarios that use the
+[`docker`](https://ansible.readthedocs.io/projects/molecule/configuration/)
+driver.
 
 This action expects the following (default Ansible role) structure:
-```
+
+```text
 .
 ├── defaults
 │   └── main.yml
@@ -28,9 +32,14 @@ This action expects the following (default Ansible role) structure:
     └── main.yml
 ```
 
-If you are missing the `molecule` directory, please have a look at this [skeleton role](https://github.com/robertdebock/ansible-role-skeleton) or one of the many examples listed on [my website](https://robertdebock.nl/).
+If you are missing the `molecule` directory, please have a look at this
+[skeleton role](https://github.com/robertdebock/ansible-role-skeleton) or one of
+the many examples listed on [Robert de Bock's site](https://robertdebock.nl/).
 
-When `tox.ini` is found, [tox](https://tox.readthedocs.io/en/latest/) is used to test the role. Tox will install all dependecies found in `tox.ini` itself, meaning `tox.ini` determines the version of [molecule](https://molecule.readthedocs.io/en/latest/) that is used.
+When `tox.ini` is found, [tox](https://tox.wiki/en/latest/) is used to test the
+role. Tox will install all dependencies found in `tox.ini` itself, meaning
+`tox.ini` determines the version of
+[molecule](https://ansible.readthedocs.io/projects/molecule/) that is used.
 
 ## Inputs
 
@@ -48,7 +57,8 @@ The tag of the container image to use. Default `"latest"`.
 
 ### `options`
 
-The [options to pass to `tox`](https://tox.readthedocs.io/en/latest/config.html#tox). For example `parallel`. Default `""`. (empty)
+The [options to pass to `tox`](https://tox.wiki/en/latest/config.html#tox). For
+example `parallel`. Default `""`. (empty)
 
 ### `command`
 
@@ -60,7 +70,8 @@ The molecule scenario to run. Default `"default"`
 
 ## Example usage
 
-Here is a default configuration that tests your role on `namespace: robertdebock`, `image: fedora`, `tag: latest`.
+Here is a default configuration that tests your role on `namespace:
+robertdebock`, `image: fedora`, `tag: latest`.
 
 ```yaml
 ---
@@ -69,19 +80,21 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
         with:
           path: "${{ github.repository }}"
       - name: molecule
-        uses: robertdebock/molecule-action@6.0.0
+        uses: balling-dev/molecule-action@1.0.0
 ```
 
-> NOTE: the `checkout` action needs to place the file in `${{ github.repository }}` in order for Molecule to find your role.
+> NOTE: the `checkout` action needs to place the file in
+> `${{ github.repository }}` in order for Molecule to find your role.
 
-If you want to test your role against multiple distributions, you can use this pattern:
+If you want to test your role against multiple distributions, you can use this
+pattern:
 
 ```yaml
 ---
@@ -92,20 +105,20 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
         with:
           path: "${{ github.repository }}"
       - name: molecule
-        uses: robertdebock/molecule-action@6.0.0
+        uses: balling-dev/molecule-action@1.0.0
         with:
           command: lint
   test:
     needs:
       - lint
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-22.04
     strategy:
       matrix:
         image:
@@ -118,11 +131,11 @@ jobs:
           - ubuntu
     steps:
       - name: checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.1
         with:
           path: "${{ github.repository }}"
       - name: molecule
-        uses: robertdebock/molecule-action@6.0.0
+        uses: balling-dev/molecule-action@1.0.0
         with:
           image: "${{ matrix.image }}"
           options: parallel
@@ -136,7 +149,7 @@ You can enable Molecule debugging by using this pattern:
 ```yaml
 # Stuff omitted.
       - name: molecule
-        uses: robertdebock/molecule-action@6.0.0
+        uses: balling-dev/molecule-action@1.0.0
         with:
           image: ${{ matrix.config.image }}
           tag: ${{ matrix.config.tag }}
