@@ -1,0 +1,63 @@
+# Continuous integration configuration
+
+---
+
+name: Continuous Integration
+
+on:
+  pull_request:
+  push:
+    branches:
+      - '**'  
+  schedule:
+    - cron: "0 0 * * 0"
+
+permissions:
+  contents: read
+  issues: write
+  statuses: write
+
+jobs:
+  typos:
+    name: Typos
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+      - name: Check typos
+        uses: crate-ci/typos@master
+
+  lychee:
+    name: Links
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.1.1
+      - name: Link Checker
+        id: lychee
+        uses: lycheeverse/lychee-action@v1.9.0
+      - name: Create Issue From File
+        if: env.lychee_exit_code != 0
+        uses: peter-evans/create-issue-from-file@v4.0.1
+        with:
+          title: Link Checker Report
+          content-filepath: ./lychee/out.md
+          labels: report, automated issue        
+
+  linter:
+    name: Lint Code Base
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4.1.1
+        with:
+          fetch-depth: 0
+
+      - name: Lint Code Base
+        uses: super-linter/super-linter@v5.7.2
+        env:
+          VALIDATE_ALL_CODEBASE: false
+          DEFAULT_BRANCH: main
+          LINTER_RULES_PATH: .
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

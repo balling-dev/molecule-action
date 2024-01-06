@@ -1,0 +1,2 @@
+# Do not check github commits (e.g. in CHANGELOG.md)
+https://github.com/balling-dev/molecule-action/commit/.*
